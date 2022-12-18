@@ -1,10 +1,11 @@
 const { SlashCommandBuilder, PermissionsBitField } = require('discord.js');
 const { WildernessFlashEvents } = require('../resources/Runescape');
 
-const Subscribe = async (interaction) => {
+const Subscribe = async (interaction, specialsOnly = false) => {
     let res = WildernessFlashEvents.addToSubbedChannels({
         id: interaction.channelId,
-        name: interaction.channel.name
+        name: interaction.channel.name,
+        specialsOnly: specialsOnly
     });
 
     if (res == 201)
@@ -41,6 +42,7 @@ module.exports = {
                 .setRequired(true)
                 .addChoices(
                     { name: 'Subscribe', value: 'subscribe' },
+                    { name: 'Specials Only', value: 'specials' },
                     { name: 'Unsubscribe', value: 'unsubscribe' }
                 )
         )
@@ -48,6 +50,9 @@ module.exports = {
     async execute(interaction) {
         if (interaction.options.getString('type') == "subscribe") {
             return Subscribe(interaction);
+        }
+        if (interaction.options.getString('type') == 'specials') {
+            return Subscribe(interaction, true);
         }
         if (interaction.options.getString('type') == "unsubscribe") {
             return Unsubscribe(interaction);

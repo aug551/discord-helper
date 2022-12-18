@@ -31,7 +31,7 @@ class WildernessFlashEvents extends EventEmitter {
 
 
     handleUpcomingEvent() {
-        // this.emit('eventSoon', this.getNextEvent());
+        this.emit('eventSoon', this.getNextEvent());
         this.getNextEvent();
         setTimeout(this.handleUpcomingEvent.bind(this), 3600000);
     }
@@ -76,7 +76,10 @@ class WildernessFlashEvents extends EventEmitter {
             return 409;
         }
 
-        subbedChannels[channel.id] = channel.name;
+        subbedChannels[channel.id] = {
+            name: channel.name,
+            specialsOnly: channel.specialsOnly
+        }
 
         this.saveChannels();
         console.log(`(Wildy) - Added ${channel.id} to the list.`);
