@@ -1,0 +1,5 @@
+{
+    "help": "List of commands:\n- help: Displays this message,\n- user: Gets the current user attached to this discord account,\n- login: Associate your account to MAL account",
+    "login": "Member does not have a MAL account associated with their user.\nTo associate a MAL account, please login here",
+    "logout": "Successfully logged out."
+}
