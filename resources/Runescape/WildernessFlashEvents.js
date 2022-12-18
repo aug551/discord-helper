@@ -33,7 +33,7 @@ class WildernessFlashEvents extends EventEmitter {
     handleUpcomingEvent() {
         // this.emit('eventSoon', this.getNextEvent());
         this.getNextEvent();
-        setTimeout(this.handleUpcomingEvent.bind(this), 1000);
+        setTimeout(this.handleUpcomingEvent.bind(this), 3600000);
     }
 
     getNextEvent() {
