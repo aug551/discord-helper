@@ -31,28 +31,25 @@ class WildernessFlashEvents extends EventEmitter {
 
 
     handleUpcomingEvent() {
-        this.emit('eventSoon', this.getNextEvent());
-
-        setTimeout(this.handleUpcomingEvent.bind(this), 3600000);
+        // this.emit('eventSoon', this.getNextEvent());
+        this.getNextEvent();
+        setTimeout(this.handleUpcomingEvent.bind(this), 1000);
     }
 
     getNextEvent() {
+
         let baseline = 1670742000000; // Dec 11 2022, 2:00 AM
         let currentEventIdx = 2;
         // let baselineEvent = events[3]; // Butterfly Swarm
         // let hoursElapsed = 0;
 
         let now = new Date();
-        now.setHours(now.getHours() + 1);
-        now.setMinutes(0);
-        now.setMilliseconds(0);
-        let nowMs = now.getTime();
+        let nowMs = now.getTime() + 3600000;
 
         while (baseline < nowMs) {
             baseline += 3600000; // Add one hour to baseline
             currentEventIdx = (currentEventIdx == 12) ? 0 : currentEventIdx + 1;
         }
-
         return this.events[currentEventIdx];
     }
 

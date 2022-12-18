@@ -3,6 +3,7 @@ const path = require('path');
 const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
 require('dotenv').config();
 const { WildernessFlashEvents } = require('./resources/Runescape');
+// const app = require('./server');
 
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -46,7 +47,7 @@ client.on(Events.InteractionCreate, async interaction => {
 client.once(Events.ClientReady, c => {
     console.log(`Ready! Logged in as ${c.user.tag}`);
 
-    let wildyHandler = new WildernessFlashEvents(10);
+    let wildyHandler = new WildernessFlashEvents(37);
     wildyHandler.on('eventSoon', e => {
         let subbed = WildernessFlashEvents.getSubbedChannels();
         Object.keys(subbed).forEach(key => {
@@ -59,3 +60,6 @@ client.once(Events.ClientReady, c => {
 
 // Log in to Discord with your client's token
 client.login(process.env.BOT_TOKEN);
+// client.login(process.env.BOT_TOKEN);
+
+// app.listen(process.env.PORT, () => console.log(`App listening on port ${process.env.PORT}`));
