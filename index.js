@@ -46,7 +46,7 @@ client.on(Events.InteractionCreate, async interaction => {
 client.once(Events.ClientReady, c => {
     console.log(`Ready! Logged in as ${c.user.tag}`);
 
-    let wildyHandler = new WildernessFlashEvents();
+    let wildyHandler = new WildernessFlashEvents(10);
     wildyHandler.on('eventSoon', e => {
         let subbed = WildernessFlashEvents.getSubbedChannels();
         Object.keys(subbed).forEach(key => {

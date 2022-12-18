@@ -21,10 +21,10 @@ class WildernessFlashEvents extends EventEmitter {
     ];
     reminderInterval;
 
-    constructor(reminderInterval = 5) {
+    constructor(reminderInterval) {
         super();
 
-        this.reminderInterval = reminderInterval;
+        this.reminderInterval = (reminderInterval) ? reminderInterval : 5;
 
         setTimeout(this.handleUpcomingEvent.bind(this), this.getNextReminderTime());
     }
