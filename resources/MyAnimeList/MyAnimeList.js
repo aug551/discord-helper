@@ -45,14 +45,14 @@ async function getUserDetails(userId) {
     return response;
 }
 
-async function animeSearch(animeName, userId, limit = 5, nextPage = "",) {
+async function animeSearch(animeName, limit = 5, nextPage = "",) {
     let url = `https://api.myanimelist.net/v2/anime?q=${animeName}&limit=${limit}&fields=alternative_titles,start_date,end_date,synopsis,status,num_episodes,studios`;
 
     if (nextPage != "") url = nextPage;
 
     let res = await fetch(url, {
         headers: {
-            Authorization: `Bearer ${users[userId].access_token}`
+            "X-MAL-CLIENT-ID": "2b8d36cc897656a0b7ec7ccce4c0707c"
         }
     })
 

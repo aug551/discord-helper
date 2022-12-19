@@ -66,6 +66,40 @@ module.exports = {
                 ephemeral: true
             });
         }
+        if (command.startsWith('search')) {
+            let query = command.replace('search', '');
+            query = query.trim();
+
+            let res = await animeSearch(query, 1);
+            let searchResults = res.data;
+            // let nextPage = res.paging.next;
+
+            toSend = [];
+
+            // console.log(searchResults);
+
+            searchResults.forEach(anime => {
+                anime = anime.node;
+
+                let embed = createEmbeddedSearch(
+                    anime.title,
+                    anime.synopsis,
+                    `https://myanimelist.net/anime/${anime.id}`,
+                    anime.main_picture.medium,
+                    anime.main_picture.large,
+                    anime.alternative_titles,
+                    anime.start_date,
+                    anime.end_date,
+                    anime.num_episodes,
+                    anime.status
+                );
+                toSend.push(embed);
+            });
+
+            return await interaction.reply({
+                embeds: toSend
+            })
+        }
 
         if (command == 'logout') {
             let stat = logout(interaction.user.id);
@@ -95,41 +129,6 @@ module.exports = {
                 content: `You are currently logged in with the MAL account: ${user.name} (${user.id})`,
                 ephemeral: true
             });
-        }
-
-        if (command.startsWith('search')) {
-            let query = command.replace('search', '');
-            query = query.trim();
-
-            let res = await animeSearch(query, interaction.user.id, 1);
-            let searchResults = res.data;
-            // let nextPage = res.paging.next;
-
-            toSend = [];
-
-            // console.log(searchResults);
-
-            searchResults.forEach(anime => {
-                anime = anime.node;
-
-                let embed = createEmbeddedSearch(
-                    anime.title,
-                    anime.synopsis,
-                    `https://myanimelist.net/anime/${anime.id}`,
-                    anime.main_picture.medium,
-                    anime.main_picture.large,
-                    anime.alternative_titles,
-                    anime.start_date,
-                    anime.end_date,
-                    anime.num_episodes,
-                    anime.status
-                );
-                toSend.push(embed);
-            });
-
-            return await interaction.reply({
-                embeds: toSend
-            })
         }
     },
 }
