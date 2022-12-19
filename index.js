@@ -54,8 +54,8 @@ client.once(Events.ClientReady, c => {
             let channel = c.channels.cache.get(key);
 
             if (!channel) return;
-            if (channel.specialsOnly && !e.special) return;
-
+            if (subbed[key].specialsOnly && !e.special) return;
+	
             channel.send(`${e.name} is happening in ${wildyHandler.reminderInterval} minutes`);
         })
     })
