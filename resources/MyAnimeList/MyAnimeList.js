@@ -5,21 +5,7 @@ const fetch = require('node-fetch');
 const users = require('./users.json');
 
 
-// Anime functions
-async function animeSearch(animeName, limit = 5, nextPage = "") {
-    let url = `https://api.myanimelist.net/v2/anime?q=${animeName}&limit=${limit}&fields=alternative_titles,start_date,end_date,synopsis,status,num_episodes,studios`;
 
-    if (nextPage != "") url = nextPage;
-
-    let res = await fetch(url, {
-        headers: {
-            "X-MAL-CLIENT-ID": process.env.MAL_CLIENT_ID
-        }
-    })
-
-    let searchResults = await res.json();
-    return searchResults;
-}
 
 async function isUserActive(userId) {
     if (!users[userId]) return false;
@@ -57,6 +43,21 @@ async function getUserDetails(userId) {
 
     let response = await rawResponse.json();
     return response;
+}
+
+async function animeSearch(animeName, userId, limit = 5, nextPage = "",) {
+    let url = `https://api.myanimelist.net/v2/anime?q=${animeName}&limit=${limit}&fields=alternative_titles,start_date,end_date,synopsis,status,num_episodes,studios`;
+
+    if (nextPage != "") url = nextPage;
+
+    let res = await fetch(url, {
+        headers: {
+            Authorization: `Bearer ${users[userId].access_token}`
+        }
+    })
+
+    let searchResults = await res.json();
+    return searchResults;
 }
 
 function setTimestamps(tokens) {
