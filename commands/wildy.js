@@ -39,7 +39,6 @@ module.exports = {
         .addStringOption(option =>
             option.setName('type')
                 .setDescription('Subscribe or unsubscribe')
-                .setRequired(true)
                 .addChoices(
                     { name: 'Subscribe', value: 'subscribe' },
                     { name: 'Specials Only', value: 'specials' },
@@ -57,6 +56,37 @@ module.exports = {
         if (interaction.options.getString('type') == "unsubscribe") {
             return Unsubscribe(interaction);
         }
+
+        let eventsStr = "";
+        let nextEvent = WildernessFlashEvents.getNextEvent();
+        let AllEvents = WildernessFlashEvents.events;
+        let nextSpecial;
+
+        AllEvents.sort((evt1, evt2) => evt1.order < evt2.order);
+        AllEvents.forEach((event, idx) => {
+            eventsStr += `${event.order}.\t${event.name}`;
+            if (event.order == nextEvent.order) {
+                eventsStr += `\t--- Upcoming event (${WildernessFlashEvents.timeToNextHour()} minutes) ---`;
+                let next = idx++;
+                while (!nextSpecial) {
+                    next++;
+                    if (next == AllEvents.length + 1) next = 0;
+                    if (AllEvents[next].special == true) nextSpecial = AllEvents[next];
+                }
+            }
+
+            if (nextSpecial && event.order == nextSpecial.order) eventsStr += '\t--- Next special event---';
+
+            if (nextEvent.order == 0 && event.order == AllEvents[AllEvents.length].order) eventsStr += '\t--- Previours Event ---';
+            else if (event.order == nextEvent.order - 1) eventsStr += '\t--- Previous Event ---';
+
+
+
+            eventsStr += "\n";
+
+        });
+
+        return await interaction.reply({ content: eventsStr, ephemeral: true });
     },
 }
 

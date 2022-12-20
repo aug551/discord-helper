@@ -4,7 +4,7 @@ const { EventEmitter } = require('events');
 const subbedChannels = require('./subbedChannels.json');
 
 class WildernessFlashEvents extends EventEmitter {
-    events = [
+    static events = [
         { name: "Spider Swarm", order: 1, special: false },
         { name: "Unnatural Outcrop", order: 2, special: false },
         { name: "Demon Stragglers", order: 3, special: false },
@@ -31,12 +31,16 @@ class WildernessFlashEvents extends EventEmitter {
 
 
     handleUpcomingEvent() {
-        this.emit('eventSoon', this.getNextEvent());
-        this.getNextEvent();
+        this.emit('eventSoon', this.constructor.getNextEvent());
         setTimeout(this.handleUpcomingEvent.bind(this), 3600000);
     }
 
-    getNextEvent() {
+    static getNextEvent() {
+        let nextEvent = this.prototype._getNextEvent();
+        return nextEvent;
+    }
+
+    _getNextEvent() {
 
         let baseline = 1670742000000; // Dec 11 2022, 2:00 AM
         let currentEventIdx = 2;
@@ -50,7 +54,7 @@ class WildernessFlashEvents extends EventEmitter {
             baseline += 3600000; // Add one hour to baseline
             currentEventIdx = (currentEventIdx == 12) ? 0 : currentEventIdx + 1;
         }
-        return this.events[currentEventIdx];
+        return this.constructor.events[currentEventIdx];
     }
 
     getNextReminderTime() {
@@ -98,6 +102,16 @@ class WildernessFlashEvents extends EventEmitter {
         return 202;
     }
 
+    static timeToNextHour() {
+        let now = new Date();
+        let later = new Date(now);
+        later.setHours(now.getHours() + 1);
+        later.setMinutes(0);
+        later.setSeconds(0);
+        later.setMilliseconds(0);
+
+        return Number((later.getTime() - now.getTime()) / 1000 / 60).toFixed(0);
+    }
 
 }
 
